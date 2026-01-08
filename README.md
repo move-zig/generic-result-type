@@ -12,18 +12,18 @@ npm i generic-result-type
 
 ## Module support
 
-This package supports *both ESM and CommonJS* out of the box.
+This package supports **both ESM and CommonJS** out of the box.
 
 ESM:
 
 ```ts
-import { Result } from "generic-result-type"
+import { Result } from 'generic-result-type';
 ```
 
 CommonJS:
 
 ```js
-const { Result } = require("generic-result-type");
+const { Result } = require('generic-result-type');
 ```
 
 TypeScript typings are included.
@@ -44,7 +44,7 @@ const parseNumber = (input: string): Result<number> => {
   const value = Number(input);
 
   if (Number.isNaN(value)) {
-    return Result.fail(Error("Not a number"));
+    return Result.fail(Error('Not a number'));
   }
 
   return Result.success(value);
@@ -59,11 +59,11 @@ Use the type guard helpers to safely branch on the result type.
 const result = getSomeValue();
 
 if (isErrorResult(result)) { // or if (result.success === false)
-  console.error("Error:", result.error.message);
+  console.error('Error:', result.error.message);
   return;
 }
 
-console.log("Value:", result.value);
+console.log('Value:', result.value);
 ```
 
 TypeScript will correctly narrow the type inside each branch without casting.
