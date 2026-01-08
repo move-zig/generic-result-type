@@ -33,6 +33,41 @@ TypeScript typings are included.
 This package has zero runtime dependencies.
 It does not rely on any external libraries.
 
+## Usage
+
+Create results using `Result.success` and `Result.fail`, then narrow them with the provided type guards.
+
+### Example function
+
+```ts
+const parseNumber = (input: string): Result<number> => {
+  const value = Number(input);
+
+  if (Number.isNaN(value)) {
+    return Result.fail(Error("Not a number"));
+  }
+
+  return Result.success(value);
+}
+```
+
+### Handling results
+
+Use the type guard helpers to safely branch on the result type.
+
+```ts
+const result = getSomeValue();
+
+if (isErrorResult(result)) { // or if (result.success === false)
+  console.error("Error:", result.error.message);
+  return;
+}
+
+console.log("Value:", result.value);
+```
+
+TypeScript will correctly narrow the type inside each branch without casting.
+
 ## License
 
 ISC
