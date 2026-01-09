@@ -58,4 +58,44 @@ describe('SuccessResult class', () => {
       await expect(instance.mapAsync(async () => Promise.reject(error))).rejects.toThrow(error);
     });
   });
+
+  describe('mapErr method', () => {
+    it('returns the result unchanged and doesn\'t run the mapping function', () => {
+      const value = Symbol();
+      const newValue = faker.lorem.words();
+      const mappingFunction = jest.fn().mockReturnValue(newValue);
+
+      const instance = new SuccessResult(value);
+      const newInstance = instance.mapErr(mappingFunction);
+
+      expect(newInstance).toBe(instance);
+      expect(mappingFunction).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('mapErrAsync method', () => {
+    it('resolves the result unchanged', async () => {
+      const value = Symbol();
+      const newValue = faker.lorem.words();
+      const mappingFunction = jest.fn().mockResolvedValue(newValue);
+
+      const instance = new SuccessResult(value);
+      const newInstance = await instance.mapErrAsync(mappingFunction);
+
+      expect(newInstance).toBe(instance);
+      expect(mappingFunction).not.toHaveBeenCalled();
+    });
+
+    it('resolves the result unchanged', async () => {
+      const value = Symbol();
+      const newValue = faker.lorem.words();
+      const mappingFunction = jest.fn().mockRejectedValue(newValue);
+
+      const instance = new SuccessResult(value);
+      const newInstance = await instance.mapErrAsync(mappingFunction);
+
+      expect(newInstance).toBe(instance);
+      expect(mappingFunction).not.toHaveBeenCalled();
+    });
+  });
 });
