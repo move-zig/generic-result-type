@@ -1,10 +1,10 @@
-export interface IErrorResult {
+export interface IErrorResult<T = Error> {
   readonly success: false;
-  readonly error: Error;
+  readonly error: T;
 }
 
-export class ErrorResult implements IErrorResult {
+export class ErrorResult<T> implements IErrorResult<T> {
   public readonly success = false as const;
 
-  public constructor(public readonly error: Error) { /* empty */ }
+  public constructor(public readonly error: T) { /* empty */ }
 }

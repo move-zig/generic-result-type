@@ -3,16 +3,14 @@ import type { Config as JestConfig } from 'jest';
 
 const swcCongfig: SwcConfig = {
   jsc: {
-    parser: { syntax: 'typescript', tsx: false },
-    target: 'es2022',
+    parser: { syntax: 'typescript' },
+    target: 'esnext',
   },
-  module: { type: 'es6' },
   sourceMaps: 'inline',
 };
 
 const config: JestConfig = {
   testEnvironment: 'node',
-  extensionsToTreatAsEsm: [ '.ts', '.mts' ],
   transform: {
     '^.+\\.[cm]?[jt]sx?$': [ '@swc/jest', swcCongfig ],
   },
@@ -25,6 +23,7 @@ const config: JestConfig = {
   setupFiles: [
     '<rootDir>/jest.env.ts',
   ],
+  collectCoverage: true,
 };
 
 export default config;

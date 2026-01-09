@@ -5,14 +5,12 @@ export { Result } from './result.mjs';
 export type { ISuccessResult };
 export type { IErrorResult };
 
-export type ResultType<T> = ISuccessResult<T> | IErrorResult;
+export type ResultType<T = void, E = Error> = ISuccessResult<T> | IErrorResult<E>;
 
-// eslint-disable-next-line @stylistic/comma-dangle
-export const isSuccessResult = <T,>(result: ResultType<T>): result is ISuccessResult<T> => {
+export const isSuccessResult = <T, E = Error>(result: ResultType<T, E>): result is ISuccessResult<T> => {
   return result.success;
 };
 
-// eslint-disable-next-line @stylistic/comma-dangle
-export const isErrorResult = <T,>(result: ResultType<T>): result is IErrorResult => {
+export const isErrorResult = <T, E = Error>(result: ResultType<T, E>): result is IErrorResult<E> => {
   return !result.success;
 };

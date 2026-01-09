@@ -7,20 +7,22 @@ import { SuccessResult } from './successResult.mjs';
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export abstract class Result {
 
-  public static success<T>(value: T): ISuccessResult<T> {
-    return new SuccessResult(value);
+  public static success(): ISuccessResult;
+  public static success<T>(value: T): ISuccessResult<T>;
+  public static success<T>(value?: T): ISuccessResult<T> {
+    return new SuccessResult(value as T);
   }
 
-  public static fail(error: Error): IErrorResult {
+  public static fail<E>(error: E): IErrorResult<E> {
     return new ErrorResult(error);
   }
 
-  public static combine<T>(results: ResultType<T>[]): ResultType<T | undefined> {
+  public static combine<T, E>(results: ResultType<T, E>[]): ResultType<T | undefined, E | undefined> {
     for (const result of results) {
       if (!result.success) {
         return result;
       }
     }
-    return Result.success<undefined>(undefined);
+    return Result.success(undefined);
   }
 }
