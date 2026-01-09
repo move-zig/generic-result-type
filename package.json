@@ -1,6 +1,6 @@
 {
   "name": "generic-result-type",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A generic result wrapper",
   "license": "ISC",
   "author": "Dave Welsh",
