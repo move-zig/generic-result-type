@@ -27,14 +27,17 @@ describe('SuccessResult class', () => {
     it('returns a new SuccessResult with the mapped value', () => {
       const value = Symbol();
       const newValue = faker.lorem.words();
+      const mappingFunction = jest.fn().mockReturnValue(newValue);
 
       const instance = new SuccessResult(value);
-      const newInstance = instance.map(() => newValue);
+      const newInstance = instance.map(mappingFunction);
 
       expect(newInstance).toBeInstanceOf(SuccessResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.value).toBe(newValue);
       expect(instance.value).toBe(value);
+
+      expect(mappingFunction).toHaveBeenCalledWith(value);
     });
   });
 
@@ -42,14 +45,17 @@ describe('SuccessResult class', () => {
     it('resolves a new SuccessResult with the mapped value', async () => {
       const value = Symbol();
       const newValue = faker.lorem.words();
+      const mappingFunction = jest.fn().mockResolvedValue(newValue);
 
       const instance = new SuccessResult(value);
-      const newInstance = await instance.mapAsync(async () => Promise.resolve(newValue));
+      const newInstance = await instance.mapAsync(mappingFunction);
 
       expect(newInstance).toBeInstanceOf(SuccessResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.value).toBe(newValue);
       expect(instance.value).toBe(value);
+
+      expect(mappingFunction).toHaveBeenCalledWith(value);
     });
 
     it('rejects if the map function rejects', async () => {

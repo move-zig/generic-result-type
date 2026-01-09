@@ -63,14 +63,17 @@ describe('ErrorResult class', () => {
     it('returns a new ErrorResult with the mapped value', () => {
       const error = Error(faker.lorem.words());
       const newError = faker.date.anytime();
+      const mappingFunction = jest.fn().mockReturnValue(newError);
 
       const instance = new ErrorResult(error);
-      const newInstance = instance.mapErr(() => newError);
+      const newInstance = instance.mapErr(mappingFunction);
 
       expect(newInstance).toBeInstanceOf(ErrorResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.error).toBe(newError);
       expect(instance.error).toBe(error);
+
+      expect(mappingFunction).toHaveBeenCalledWith(error);
     });
   });
 
@@ -78,14 +81,17 @@ describe('ErrorResult class', () => {
     it('resolves a new ErrorResult with the mapped value', async () => {
       const error = Error(faker.lorem.words());
       const newError = faker.date.anytime();
+      const mappingFunction = jest.fn().mockResolvedValue(newError);
 
       const instance = new ErrorResult(error);
-      const newInstance = await instance.mapErrAsync(async () => Promise.resolve(newError));
+      const newInstance = await instance.mapErrAsync(mappingFunction);
 
       expect(newInstance).toBeInstanceOf(ErrorResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.error).toBe(newError);
       expect(instance.error).toBe(error);
+
+      expect(mappingFunction).toHaveBeenCalledWith(error);
     });
 
     it('rejects if the map function rejects', async () => {
