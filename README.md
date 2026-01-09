@@ -17,7 +17,7 @@ This package supports **both ESM and CommonJS** out of the box.
 ESM:
 
 ```ts
-import { success, fail } from 'generic-result-type';
+import { success, fail, type Result } from 'generic-result-type';
 ```
 
 CommonJS:
@@ -67,6 +67,21 @@ console.log('Value:', result.value);
 ```
 
 TypeScript will correctly narrow the type inside each branch without casting.
+
+### Mapping
+
+You can map the value or the error of a Result with these methods:
+
+* map
+* mapErr
+* mapAsync
+* mapErrAsync
+
+```ts
+const numberResult = getSomeNumberResult().map(x => x * 2);
+
+const responseResult = await getSomeStringResult().mapAsync(async x => fetch(x));
+```
 
 ## License
 
