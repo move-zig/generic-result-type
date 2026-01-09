@@ -5,7 +5,7 @@ import { SuccessResult } from '../src/successResult.mjs';
 describe('SuccessResult class', () => {
   it('can be instantiated', () => {
     expect(() => {
-      const instance = new SuccessResult(undefined);
+      const instance = new SuccessResult();
       expect(instance).toBeInstanceOf(SuccessResult);
     }).not.toThrow();
   });
@@ -35,6 +35,27 @@ describe('SuccessResult class', () => {
       expect(newInstance).not.toBe(instance);
       expect(newInstance.value).toBe(newValue);
       expect(instance.value).toBe(value);
+    });
+  });
+
+  describe('mapAsync method', () => {
+    it('resolves a new SuccessResult with the mapped value', async () => {
+      const value = Symbol();
+      const newValue = faker.lorem.words();
+
+      const instance = new SuccessResult(value);
+      const newInstance = await instance.mapAsync(async () => Promise.resolve(newValue));
+
+      expect(newInstance).toBeInstanceOf(SuccessResult);
+      expect(newInstance).not.toBe(instance);
+      expect(newInstance.value).toBe(newValue);
+      expect(instance.value).toBe(value);
+    });
+
+    it('rejects if the map function rejects', async () => {
+      const instance = new SuccessResult();
+      const error = Error();
+      await expect(instance.mapAsync(async () => Promise.reject(error))).rejects.toThrow(error);
     });
   });
 });
