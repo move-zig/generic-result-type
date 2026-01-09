@@ -26,11 +26,20 @@ export const isErrorResult = <T, E = Error>(result: Result<T, E>): result is IEr
   return !result.success;
 };
 
-export function combine(...results: Result[]): Result {
+export function combine(results: Result[]): Result<unknown[], unknown[]> {
+  const values: unknown[] = [];
+  const errors: unknown[] = [];
+
   for (const r of results) {
-    if (!r.success) {
-      return r;
+    if (r.success) {
+      values.push(r.value);
+    } else {
+      errors.push(r.error);
     }
   }
-  return new SuccessResult(undefined);
+
+  if (errors.length) {
+    return new ErrorResult(errors);
+  }
+  return new SuccessResult(results);
 }
