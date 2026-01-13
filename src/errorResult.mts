@@ -26,7 +26,7 @@ export interface IErrorResult<E = Error> extends IResult<never, E> {
    * @param mapFunction the mapping function
    * @returns a new `ErrorResult`
    */
-  readonly mapErr: <M>(mapFunction: (value: E) => M) => IErrorResult<M>;
+  readonly mapErr: <M>(mapFunction: (error: E) => M) => IErrorResult<M>;
 
   /**
    * Asynchronously calls a defined callback function on the `error` property, and returns a new `ErrorResult` with the resulting value.
@@ -34,7 +34,7 @@ export interface IErrorResult<E = Error> extends IResult<never, E> {
    * @param mapFunction the mapping function
    * @returns a new `ErrorResult`
    */
-  readonly mapErrAsync: <M>(mapFunction: (value: E) => Promise<M>) => Promise<IErrorResult<M>>;
+  readonly mapErrAsync: <M>(mapFunction: (error: E) => Promise<M>) => Promise<IErrorResult<M>>;
 }
 
 export class ErrorResult<E> implements IResult<never, E>, IErrorResult<E> {
@@ -43,7 +43,7 @@ export class ErrorResult<E> implements IResult<never, E>, IErrorResult<E> {
   public constructor(public readonly error: E) { /* empty */ }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-unnecessary-type-parameters
-  public map<M>(mapFunction: (error: never) => M): ErrorResult<E> {
+  public map<M>(mapFunction: (value: never) => M): ErrorResult<E> {
     return new ErrorResult(this.error);
   }
 
@@ -56,7 +56,7 @@ export class ErrorResult<E> implements IResult<never, E>, IErrorResult<E> {
     return new ErrorResult(mapFunction(this.error));
   }
 
-  public async mapErrAsync<M>(mapFunction: (value: E) => Promise<M>): Promise<ErrorResult<M>> {
+  public async mapErrAsync<M>(mapFunction: (error: E) => Promise<M>): Promise<ErrorResult<M>> {
     return new ErrorResult(await mapFunction(this.error));
   }
 }

@@ -26,7 +26,7 @@ export interface ISuccessResult<T = void> {
    * @returns a new `SuccessResult`
    */
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-  readonly mapErr: <M>(mapFunction: (value: never) => M) => ISuccessResult<T>;
+  readonly mapErr: <M>(mapFunction: (error: never) => M) => ISuccessResult<T>;
 
   /**
    * Asynchronously returns a new `SuccessResult` with the same `value` property as this one.
@@ -34,7 +34,7 @@ export interface ISuccessResult<T = void> {
    * @param mapFunction the mapping function
    * @returns a new `SuccessResult`
    */
-  readonly mapErrAsync: <M>(mapFunction: (value: never) => Promise<M>) => Promise<ISuccessResult<T>>;
+  readonly mapErrAsync: <M>(mapFunction: (error: never) => Promise<M>) => Promise<ISuccessResult<T>>;
 }
 
 export class SuccessResult<T = void> implements IResult<T, never>, ISuccessResult<T> {
@@ -59,7 +59,7 @@ export class SuccessResult<T = void> implements IResult<T, never>, ISuccessResul
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/promise-function-async
-  public mapErrAsync<M>(mapFunction: (value: never) => Promise<M>): Promise<SuccessResult<T>> {
+  public mapErrAsync<M>(mapFunction: (error: never) => Promise<M>): Promise<SuccessResult<T>> {
     return Promise.resolve(new SuccessResult(this.value));
   }
 };
