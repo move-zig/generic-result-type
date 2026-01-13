@@ -1,7 +1,7 @@
-import type { ErrorResult } from './errorResult.mjs';
-import type { SuccessResult } from './successResult.mjs';
+import type { IErrorResult } from './errorResult.mjs';
+import type { ISuccessResult } from './successResult.mjs';
 
-export interface IResult<T, E> {
+export interface IResult<T = void, E = Error> {
   readonly success: boolean;
 
   /**
@@ -40,4 +40,4 @@ export interface IResult<T, E> {
   mapErrAsync: <M>(fn: (error: E) => Promise<M>) => Promise<IResult<T, M>>;
 }
 
-export type Result<T = void, E = Error> = SuccessResult<T> | ErrorResult<E>;
+export type Result<T = void, E = Error> = ISuccessResult<T> | IErrorResult<E>;

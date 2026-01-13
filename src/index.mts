@@ -1,6 +1,6 @@
 import type { IErrorResult } from './errorResult.mjs';
 import { ErrorResult } from './errorResult.mjs';
-import type { Result } from './result.mjs';
+import type { IResult, Result } from './result.mjs';
 import type { ISuccessResult } from './successResult.mjs';
 import { SuccessResult } from './successResult.mjs';
 
@@ -16,11 +16,11 @@ export function fail<E>(error: E): IErrorResult<E> {
   return new ErrorResult(error);
 }
 
-export const isSuccessResult = <T, E = Error>(result: Result<T, E>): result is ISuccessResult<T> => {
+export const isSuccessResult = <T, E = Error>(result: IResult<T, E>): result is ISuccessResult<T> => {
   return result.success;
 };
 
-export const isErrorResult = <T, E = Error>(result: Result<T, E>): result is IErrorResult<E> => {
+export const isErrorResult = <T, E = Error>(result: IResult<T, E>): result is IErrorResult<E> => {
   return !result.success;
 };
 

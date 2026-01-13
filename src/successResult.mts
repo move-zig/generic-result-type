@@ -62,4 +62,4 @@ export class SuccessResult<T = void> implements ISuccessResult<T>, IResult<T, ne
   public mapErrAsync<M>(mapFunction: (error: never) => Promise<M>): Promise<SuccessResult<T>> {
     return Promise.resolve(new SuccessResult(this.value));
   }
-};
+}
