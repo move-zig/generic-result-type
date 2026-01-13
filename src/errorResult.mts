@@ -37,7 +37,7 @@ export interface IErrorResult<E = Error> extends IResult<never, E> {
   readonly mapErrAsync: <M>(mapFunction: (error: E) => Promise<M>) => Promise<IErrorResult<M>>;
 }
 
-export class ErrorResult<E> implements IResult<never, E>, IErrorResult<E> {
+export class ErrorResult<E> implements IErrorResult<E>, IResult<never, E> {
   public readonly success = false as const;
 
   public constructor(public readonly error: E) { /* empty */ }

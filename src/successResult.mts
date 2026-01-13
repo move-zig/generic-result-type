@@ -37,7 +37,7 @@ export interface ISuccessResult<T = void> {
   readonly mapErrAsync: <M>(mapFunction: (error: never) => Promise<M>) => Promise<ISuccessResult<T>>;
 }
 
-export class SuccessResult<T = void> implements IResult<T, never>, ISuccessResult<T> {
+export class SuccessResult<T = void> implements ISuccessResult<T>, IResult<T, never> {
   public readonly success = true as const;
   public readonly value: T;
 
