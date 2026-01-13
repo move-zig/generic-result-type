@@ -1,12 +1,10 @@
 import type { IErrorResult } from './errorResult.mjs';
 import { ErrorResult } from './errorResult.mjs';
+import type { Result } from './result.mjs';
 import type { ISuccessResult } from './successResult.mjs';
 import { SuccessResult } from './successResult.mjs';
 
-export type { ISuccessResult };
-export type { IErrorResult };
-
-export type Result<T = void, E = Error> = ISuccessResult<T> | IErrorResult<E>;
+export type { Result, ISuccessResult, IErrorResult };
 
 export function success(): ISuccessResult;
 export function success<T>(value: T): ISuccessResult<T>;

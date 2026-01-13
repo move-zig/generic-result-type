@@ -18,14 +18,15 @@ describe('SuccessResult class', () => {
   });
 
   it('retains the exact value', () => {
-    const value = { name: faker.person.fullName(), score: faker.number.int() };
+    const value = Object.freeze({ name: faker.person.fullName(), score: faker.number.int() });
     const instance = new SuccessResult(value);
     expect(instance.value).toBe(value);
+    expect(instance.value).toEqual(value);
   });
 
   describe('map method', () => {
-    it('returns a new SuccessResult with the mapped value', () => {
-      const value = Symbol();
+    it('returns a new instance with the mapped value', () => {
+      const value = Object.freeze({ s: Symbol() });
       const newValue = faker.lorem.words();
       const mappingFunction = jest.fn().mockReturnValue(newValue);
 
@@ -35,14 +36,15 @@ describe('SuccessResult class', () => {
       expect(newInstance).toBeInstanceOf(SuccessResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.value).toBe(newValue);
+      expect(newInstance.value).toEqual(newValue);
       expect(instance.value).toBe(value);
-
+      expect(instance.value).toEqual(value);
       expect(mappingFunction).toHaveBeenCalledWith(value);
     });
   });
 
   describe('mapAsync method', () => {
-    it('resolves a new SuccessResult with the mapped value', async () => {
+    it('resolves a new instance with the mapped value', async () => {
       const value = Symbol();
       const newValue = faker.lorem.words();
       const mappingFunction = jest.fn().mockResolvedValue(newValue);
@@ -53,8 +55,9 @@ describe('SuccessResult class', () => {
       expect(newInstance).toBeInstanceOf(SuccessResult);
       expect(newInstance).not.toBe(instance);
       expect(newInstance.value).toBe(newValue);
+      expect(newInstance.value).toEqual(newValue);
       expect(instance.value).toBe(value);
-
+      expect(instance.value).toEqual(value);
       expect(mappingFunction).toHaveBeenCalledWith(value);
     });
 
@@ -66,41 +69,35 @@ describe('SuccessResult class', () => {
   });
 
   describe('mapErr method', () => {
-    it('returns the result unchanged and doesn\'t run the mapping function', () => {
+    it('returns a new instance with the same value, and doesn\'t run the callback', () => {
       const value = Symbol();
-      const newValue = faker.lorem.words();
-      const mappingFunction = jest.fn().mockReturnValue(newValue);
+      const newError = faker.lorem.words();
+      const mappingFunction = jest.fn().mockReturnValue(newError);
 
       const instance = new SuccessResult(value);
       const newInstance = instance.mapErr(mappingFunction);
 
-      expect(newInstance).toBe(instance);
+      expect(newInstance).toBeInstanceOf(SuccessResult);
+      expect(newInstance).not.toBe(instance);
+      expect(newInstance.value).toBe(value);
+      expect(newInstance.value).toEqual(value);
       expect(mappingFunction).not.toHaveBeenCalled();
     });
   });
 
   describe('mapErrAsync method', () => {
-    it('resolves the result unchanged', async () => {
+    it('resolves a new instance with the same value, and doesn\'t run the callback', async () => {
       const value = Symbol();
-      const newValue = faker.lorem.words();
-      const mappingFunction = jest.fn().mockResolvedValue(newValue);
+      const newError = faker.lorem.words();
+      const mappingFunction = jest.fn().mockResolvedValue(newError);
 
       const instance = new SuccessResult(value);
       const newInstance = await instance.mapErrAsync(mappingFunction);
 
-      expect(newInstance).toBe(instance);
-      expect(mappingFunction).not.toHaveBeenCalled();
-    });
-
-    it('resolves the result unchanged', async () => {
-      const value = Symbol();
-      const newValue = faker.lorem.words();
-      const mappingFunction = jest.fn().mockRejectedValue(newValue);
-
-      const instance = new SuccessResult(value);
-      const newInstance = await instance.mapErrAsync(mappingFunction);
-
-      expect(newInstance).toBe(instance);
+      expect(newInstance).toBeInstanceOf(SuccessResult);
+      expect(newInstance).not.toBe(instance);
+      expect(newInstance.value).toBe(value);
+      expect(newInstance.value).toEqual(value);
       expect(mappingFunction).not.toHaveBeenCalled();
     });
   });
