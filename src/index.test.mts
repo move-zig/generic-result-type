@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 
 import { ErrorResult } from './errorResult.mjs';
-import { combine, fail, flatten, isErrorResult, isSuccessResult, success } from './index.mjs';
+import { combine, fail, failure, flatten, isErrorResult, isSuccessResult, success } from './index.mjs';
 import { SuccessResult } from './successResult.mjs';
 
 describe('success', () => {
@@ -13,12 +13,19 @@ describe('success', () => {
   });
 });
 
-describe('fail', () => {
+describe('failure', () => {
   it('returns an ErrorResult', () => {
     const error = { foo: 3, bar: new Date(), baz: Symbol() };
-    const result = fail(error);
+    const result = failure(error);
     expect(result).toBeInstanceOf(ErrorResult);
     expect(result.error).toBe(error);
+  });
+});
+
+describe('fail', () => {
+  it('equals failure', () => {
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    expect(fail).toBe(failure);
   });
 });
 
@@ -29,14 +36,14 @@ describe('isSuccessResult', () => {
   });
 
   it('returns false for ErrorResults', () => {
-    const result = fail(Error());
+    const result = failure(Error());
     expect(isSuccessResult(result)).toBe(false);
   });
 });
 
 describe('isErrorResult', () => {
   it('returns true for ErrorResults', () => {
-    const result = fail(Error());
+    const result = failure(Error());
     expect(isErrorResult(result)).toBe(true);
   });
 
@@ -51,7 +58,7 @@ describe('combine', () => {
     const success1 = success();
     const success2 = success();
     const error = Error();
-    const failure1 = fail(error);
+    const failure1 = failure(error);
 
     const result = combine([ success1, success2, failure1 ]);
     expect(result.success).toBe(false);
@@ -88,7 +95,7 @@ describe('flatten', () => {
   });
 
   it('shouldn\'t do anything to a ErrorResult that\'s already flat', () => {
-    const result = fail(43);
+    const result = failure(43);
     const flattened = flatten(result);
     expect(flattened.success).toBe(false);
     assert(!flattened.success);
@@ -104,7 +111,7 @@ describe('flatten', () => {
   });
 
   it('should collapse all errors into each other and all successes into each other', () => {
-    const result = fail(success(success(fail(success(success(fail(success(2))))))));
+    const result = failure(success(success(failure(success(success(failure(success(2))))))));
     const flattened = flatten(result);
     expect(flattened).toBeInstanceOf(ErrorResult);
     assert(flattened instanceof ErrorResult);
@@ -116,7 +123,7 @@ describe('flatten', () => {
   });
 
   it('errors should bubble up', () => {
-    const result = success(success(success(fail(fail(success(success(fail(success(2)))))))));
+    const result = success(success(success(failure(failure(success(success(failure(success(2)))))))));
     const flattened = flatten(result);
     expect(flattened).toBeInstanceOf(ErrorResult);
     assert(flattened instanceof ErrorResult);

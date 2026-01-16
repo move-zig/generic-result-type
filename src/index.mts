@@ -12,9 +12,14 @@ export function success<T>(value?: T): ISuccessResult<T> {
   return new SuccessResult(value as T);
 };
 
-export function fail<E>(error: E): IErrorResult<E> {
+export function failure<E>(error: E): IErrorResult<E> {
   return new ErrorResult(error);
 }
+
+/**
+ * @deprecated
+ */
+export const fail = failure;
 
 export const isSuccessResult = <T, E = Error>(result: IResult<T, E>): result is ISuccessResult<T> => {
   return result.success;
@@ -71,7 +76,7 @@ const getError = (result: ErrorResult<unknown>): ErrorResult<unknown> => {
 
     // if the value is a SuccessResult, swallow it into an error
     if (isSuccessResult(value)) {
-      return fail(value);
+      return failure(value);
     }
 
     // otherwise the value is an ErrorResult, return it
