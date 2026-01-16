@@ -17,13 +17,13 @@ This package supports **both ESM and CommonJS** out of the box.
 ESM:
 
 ```ts
-import { success, fail, type Result } from 'generic-result-type';
+import { success, failure, type Result } from 'generic-result-type';
 ```
 
 CommonJS:
 
 ```js
-const { success, fail } = require('generic-result-type');
+const { success, failure } = require('generic-result-type');
 ```
 
 TypeScript typings are included.
@@ -35,7 +35,7 @@ It does not rely on any external libraries.
 
 ## Usage
 
-Create results using the `success` and `fail` functions, then narrow them with the provided type guards.
+Create results using the `success` and `failure` functions, then narrow them with the provided type guards.
 
 ### Example function
 
@@ -44,7 +44,7 @@ const parseNumber = (input: string): Result<number> => {
   const value = Number(input);
 
   if (Number.isNaN(value)) {
-    return fail(Error('Not a number'));
+    return failure(Error('Not a number'));
   }
 
   return success(value);
